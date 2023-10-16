@@ -1,0 +1,17 @@
+# Chroma DB
+db
+
+# Embeddings
+embeddings
+
+# Models
+models
+
+# Libraries
+llama2-demo
+
+# pdf data
+pdf-data
+
+# Old requirements file
+requirements.old.txt
