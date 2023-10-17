@@ -9,6 +9,9 @@ models
 
 # Libraries
 llama2-demo
+gradio-demo
+gradio-demo.old
+sourceLibraries
 
 # pdf data
 pdf-data

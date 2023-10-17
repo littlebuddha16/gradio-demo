@@ -1,0 +1,5 @@
+gradio
+torch==2.1.0
+auto-gptq
+langchain[all]
+transformers

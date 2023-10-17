@@ -2,13 +2,13 @@ import os, shutil, time, pickle
 import gradio as gr
 import torch
 from auto_gptq import AutoGPTQForCausalLM
-from langchain import HuggingFacePipeline, PromptTemplate
+from langchain.llms import HuggingFacePipeline, PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import PyPDFDirectoryLoader
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from pdf2image import convert_from_path
+#from pdf2image import convert_from_path
 from transformers import AutoTokenizer, TextStreamer, pipeline
 
 DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -163,13 +163,6 @@ def trainModel():
     db = Chroma.from_documents(splitText, embeddings, persist_directory="db")
     print(f"db after: {type(db)}")
     global qa_chain
-    qa_chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=db.as_retriever(search_kwargs={"k": 2}),
-        return_source_documents=True,
-        chain_type_kwargs={"prompt": prompt},
-    )
     return "Embeddings saved to db"
 
 
@@ -201,6 +194,13 @@ with gr.Blocks() as app:
     
     with gr.Tab('Chat') as chatbot:
         def chat(message, history):
+            qa_chain = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
+            retriever=db.as_retriever(search_kwargs={"k": 2}),
+            return_source_documents=True,
+            chain_type_kwargs={"prompt": prompt},
+        )
             response = qa_chain(message)
             for i in range(len(response)):
                 time.sleep(0.05)
